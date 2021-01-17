@@ -22,6 +22,7 @@ let persons = [
 ]
 app.use(morgan('tiny'))
   app.use(express.json()) 
+app.use(express.static('build'))
 
 app.get('/info', (req, res) => {
   res.send(`<p>phonebook has info for ${persons.length} people</p><p> ${new Date}</p>`)
@@ -57,7 +58,7 @@ app.post('/api/persons', (request, response) => {
     const newId = Math.floor(Math.random()* Math.floor(13371337)) 
     const phonebookEntry= { id:newId, name:person.name, number:person.number }
   persons.push(phonebookEntry)>0 
-    response.sendStatus(202)
+    response.status(202).json(phonebookEntry)
   }
   })
 
