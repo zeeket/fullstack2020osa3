@@ -21,6 +21,14 @@ let persons = [
 ]
 
 app.use(express.json()) 
+const requestLogger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+app.use(requestLogger)
 
 app.get('/info', (req, res) => {
   res.send(`<p>phonebook has info for ${persons.length} people</p><p> ${new Date}</p>`)
@@ -45,9 +53,13 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
   const person = request.body
-  console.log(person)
 
-  response.json(note)
+  console.log(`person ${person}`)
+  console.log(`person name ${person.name} person number ${person.number}`)
+  const newId = Math.floor(Math.random()* Math.floor(13371337)) 
+  const phonebookEntry= { id:newId, name:person.name, number:person.number }
+  persons.push(phonebookEntry)
+  response.sendStatus(202)
 })
 
 const port = 3001
