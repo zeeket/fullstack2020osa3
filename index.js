@@ -33,7 +33,7 @@ app.get('/api/persons', (req, res) => {
 app.get('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
   const person = persons.find(p => p.id === id)
-  response.json(person)
+  person ? response.json(person):response.sendStatus(404)
 })
 
 app.post('/api/persons', (request, response) => {
