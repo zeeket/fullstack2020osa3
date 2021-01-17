@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+var morgan = require('morgan')
 
 let persons = [
   { id:1,
@@ -19,16 +20,8 @@ let persons = [
     number: "39-23-6423122"
   }
 ]
-
-app.use(express.json()) 
-const requestLogger = (request, response, next) => {
-  console.log('Method:', request.method)
-  console.log('Path:  ', request.path)
-  console.log('Body:  ', request.body)
-  console.log('---')
-  next()
-}
-app.use(requestLogger)
+app.use(morgan('tiny'))
+  app.use(express.json()) 
 
 app.get('/info', (req, res) => {
   res.send(`<p>phonebook has info for ${persons.length} people</p><p> ${new Date}</p>`)

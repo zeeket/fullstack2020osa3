@@ -1,7 +1,11 @@
 {
   "name": "osa3fullstackopen2020",
   "version": "1.0.0",
-  "description": "",
+  "description": "separate repo for part 3 tasks",
+"repository": {
+  "type" : "git",
+  "url" : "git@github.com:zeeket/fullstack2020osa3.git"
+},
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -14,6 +18,7 @@
     "nodemon": "^2.0.7"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "morgan": "^1.10.0"
   }
 }
