@@ -56,12 +56,18 @@ app.post('/api/persons', (request, response) => {
 
   console.log(`person ${person}`)
   console.log(`person name ${person.name} person number ${person.number}`)
-  const newId = Math.floor(Math.random()* Math.floor(13371337)) 
-  const phonebookEntry= { id:newId, name:person.name, number:person.number }
-  persons.push(phonebookEntry)
-  response.sendStatus(202)
-})
+  if(!person.name||!person.number){
+    response.status(400).send({error:'missing name or number'})
+  } else if(persons.find(p=>p.name===person.name)) {
+    response.status(400).send({error:'name must be unique'}) 
+  } else {
+    const newId = Math.floor(Math.random()* Math.floor(13371337)) 
+    const phonebookEntry= { id:newId, name:person.name, number:person.number }
+  persons.push(phonebookEntry)>0 
+    response.sendStatus(202)
+  }
+  })
 
-const port = 3001
-app.listen(port)
-console.log(`Server running on port ${port}`)
+    const port = 3001
+  app.listen(port)
+  console.log(`Server running on port ${port}`)
