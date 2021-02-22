@@ -46,20 +46,21 @@ app.delete('/api/persons/:id', (request, response) => {
 app.post('/api/persons', (request, response) => {
   const person = request.body
 
-  console.log(`person ${person}`)
-  console.log(`person name ${person.name} person number ${person.number}`)
+  console.log(`saving person name ${person.name} person number ${person.number}`)
 
-  if(!person.name||!person.number){
+  if(person===undefined||!person.name||!person.number){
+    console.log("you gave undefined name or number or person")
     response.status(400).send({error:'missing name or number'})
-  } else if(persons.find(p=>p.name===person.name)) {
-    response.status(400).send({error:'name must be unique'}) 
-  } else {
+  }else{ //else if(Person.findOne({'name':person.name})) {
+    //response.status(400).send({error:'name must be unique'}) 
+  //} else {
     //const newId = Math.floor(Math.random()* Math.floor(13371337)) 
     const phonebookEntry= new Person({ name:person.name, number:person.number })
     phonebookEntry.save().then(savedPerson => {
+      console.log("saved person?")
       response.json(savedPerson)
     })
-  }
+ }
 })
 
 const port = (process.env.PORT||3001)
