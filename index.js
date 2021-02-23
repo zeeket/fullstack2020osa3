@@ -21,27 +21,26 @@ app.get('/api/persons', (req, res) => {
   })
 })
 
-/*
 app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const person = Person.findOne({'id':id})
-  if(person){
-  response.json(person)
-} else {
-  response.sendStatus(404)
-  }
+  Person.findById(request.params.id)
+    .then(person => {
+      if(person) {
+        response.json(person)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
-*/
 
-/*
-app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const person = persons.find(p => p.id === id)
-  persons = persons.filter(p => p.id !== id)
-  person ? response.sendStatus(202):response.sendStatus(404)
+app.delete('/api/persons/:id', (request, response, next) => {
+  Person.findByIdAndRemove(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
 })
-*/
 
 app.post('/api/persons', (request, response) => {
   const person = request.body
@@ -53,14 +52,14 @@ app.post('/api/persons', (request, response) => {
     response.status(400).send({error:'missing name or number'})
   }else{ //else if(Person.findOne({'name':person.name})) {
     //response.status(400).send({error:'name must be unique'}) 
-  //} else {
+    //} else {
     //const newId = Math.floor(Math.random()* Math.floor(13371337)) 
     const phonebookEntry= new Person({ name:person.name, number:person.number })
     phonebookEntry.save().then(savedPerson => {
       console.log("saved person?")
       response.json(savedPerson)
     })
- }
+  }
 })
 
 const port = (process.env.PORT||3001)
