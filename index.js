@@ -21,7 +21,7 @@ app.get('/api/persons', (req, res) => {
   })
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id)
     .then(person => {
       if(person) {
@@ -47,7 +47,7 @@ app.post('/api/persons', (request, response) => {
 
   console.log(`saving person name ${person.name} person number ${person.number}`)
 
-  if(person===undefined||!person.name||!person.number){
+  if(person===undefined||!person.name||!person.number||person.name===""||person.number===""){
     console.log("you gave undefined name or number or person")
     response.status(400).send({error:'missing name or number'})
   }else{ //else if(Person.findOne({'name':person.name})) {
@@ -61,6 +61,18 @@ app.post('/api/persons', (request, response) => {
     })
   }
 })
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+
+  next(error)
+}
+
+app.use(errorHandler)
 
 const port = (process.env.PORT||3001)
 app.listen(port)
