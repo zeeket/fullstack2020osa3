@@ -29,6 +29,7 @@ const App = () => {
       number: newNumber
     }
     const sameName = persons.find(p => p.name === newName)
+
     if(!sameName) {
       personService
         .create(nameObject)
@@ -37,11 +38,14 @@ const App = () => {
           setNewName('')
           setNewNumber('')
           setNotifMessage(
-            `${returnedPerson.name} was added`
+            `${returnedPerson.name} was added!`
           )
           setTimeout(() => {
             setNotifMessage(null)
           }, 5000)
+        })
+        .catch(error => {
+          setNotifMessage(error.response.data.error)
         })
 
     } else if(sameName.number !== newNumber){
