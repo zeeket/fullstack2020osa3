@@ -36,7 +36,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -47,8 +47,8 @@ app.post('/api/persons', (request, response, next) => {
 
   console.log(`saving person name ${person.name} person number ${person.number}`)
 
-  if(person===undefined||!person.name||!person.number||person.name===""||person.number===""){
-    console.log("you gave undefined name or number or person")
+  if(person===undefined||!person.name||!person.number||person.name===''||person.number===''){
+    console.log('you gave undefined name or number or person')
     response.status(400).send({error:'missing name or number'})
   }else{ //else if(Person.findOne({'name':person.name})) {
     //response.status(400).send({error:'name must be unique'}) 
@@ -56,10 +56,10 @@ app.post('/api/persons', (request, response, next) => {
     //const newId = Math.floor(Math.random()* Math.floor(13371337)) 
     const phonebookEntry= new Person({ name:person.name, number:person.number })
     phonebookEntry.save().then(savedPerson => {
-      console.log("saved person?")
+      console.log('saved person?')
       response.json(savedPerson)
     })
-    .catch(error => next(error))
+      .catch(error => next(error))
   }
 })
 
